@@ -1,0 +1,39 @@
+[
+    
+    {
+        "Barcode":"001",
+        "Desciption": "Mundial do palmeiras",
+        "Value":"9.99"
+    },
+    
+    {
+        "Barcode":"002",
+        "Desciption": "Clérigo Ateu",
+        "Value":"729.50"
+    },
+    
+    {
+        "Barcode":"003",
+        "Desciption": "Cachorro quente frio",
+        "Value":"1.50"
+    },
+    {
+        "Barcode":"004",
+        "Desciption": "Botas para gnomos",
+        "Value":"532.97"
+    },
+    {
+        "Barcode":"005",
+        "Desciption": "Paciência",
+        "Value":"0.50"
+    },
+    {
+        "Barcode":"4444",
+        "Desciption": "Café quentinho",
+        "Value":"44.44"
+    }
+    
+    
+
+    
+]
