@@ -2,34 +2,48 @@
     
     {
         "Barcode":"001",
-        "Desciption": "Mundial do palmeiras",
+        "Description": "Mundial do palmeiras",
         "Value":"9.99"
     },
     
     {
         "Barcode":"002",
-        "Desciption": "Clérigo Ateu",
+        "Description": "Clérigo Ateu",
         "Value":"729.50"
     },
     
     {
         "Barcode":"003",
-        "Desciption": "Cachorro quente frio",
+        "Description": "Cachorro quente frio",
         "Value":"1.50"
     },
     {
         "Barcode":"004",
-        "Desciption": "Botas para gnomos",
+        "Description": "Botas para gnomos",
         "Value":"532.97"
     },
     {
         "Barcode":"005",
-        "Desciption": "Paciência",
+        "Description": "Paciência",
         "Value":"0.50"
     },
     {
+        "Barcode":"006",
+        "Description": "Limão azedo",
+        "Value":"0.05"
+    },{
+        "Barcode":"007",
+        "Description": "Agente secreto mais conhecido",
+        "Value":"777.77"
+    },
+    {
+        "Barcode":"0800",
+        "Description": "Ligação gratuita*",
+        "Value":"0.99"
+    },
+    {
         "Barcode":"4444",
-        "Desciption": "Café quentinho",
+        "Description": "Café quentinho",
         "Value":"44.44"
     }
     
