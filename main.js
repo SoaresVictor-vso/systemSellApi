@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { setOperation } = require('./reqController');
 
-
+const port = process.env.port || 3000;
 
 
 
@@ -22,6 +22,6 @@ http.createServer((req,res) => {
     {
         setOperation(op, end).then((r) => {return res.end(r);})
     }
-}).listen(3000, console.log("API up"));
+}).listen(port , console.log("API up at port " + port));
 
 
