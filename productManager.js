@@ -1,4 +1,4 @@
-const data = require('./products.json');
+const data = require('./Products.json');
 
 const searchProduct = async function (cod)
 {
