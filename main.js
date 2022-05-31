@@ -11,7 +11,7 @@ const port = process.env.PORT || 3000;
 http.createServer((req,res) => {
     const end = req.url;
     const {op} = URL.parse(end, true).query;
-    
+    console.log(">>>>>>>>>API ACCESS<<<<<<<<<<<<\n==========>>>>>>" + end)
     res.writeHead(200, {'Access-Control-Allow-Origin' : '*'});
 
     if(!op)
