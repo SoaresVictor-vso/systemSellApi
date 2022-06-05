@@ -174,7 +174,8 @@ const preSetDb = function()
         password: (process.env.DB_PASSWORD),
         host: process.env.DB_URL,
         port: process.env.DB_PORT,
-        database: process.env.DB_NAME
+        database: process.env.DB_NAME,
+        ssl: true
     }
 }
 
