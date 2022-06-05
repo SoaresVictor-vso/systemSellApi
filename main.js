@@ -16,18 +16,23 @@ http.createServer(async (req,res) => {
     
     //buffer do body da requisição
     const body = [];
-
-    //adiciona cada parte do corpo da requisição no buffer
-    for await (const chunk of req) {
-        body.push(chunk);
+    let data;
+    try 
+    {
+        //adiciona cada parte do corpo da requisição no buffer
+        for await (const chunk of req) {
+            body.push(chunk);
+        }
+        data = JSON.parse(Buffer.concat(body));
+        
+        console.log(data.barcode);        
+    } 
+    catch (error) 
+    {
+        console.log("NoJSON");
     }
-    const data = JSON.parse(Buffer.concat(body));
-    
-    console.log(data.barcode);
-
 
     const end = req.url;
-    
     const {op} = URL.parse(end, true).query;
     //console.log(">>>>>>>>>API ACCESS<<<<<<<<<<<<\n==========>>>>>>" + end)
 
