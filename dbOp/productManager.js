@@ -169,14 +169,16 @@ const getAll = async function()
 
 const preSetDb = function()
 {
-    pgData = {
+    pgData = process.env.DATABASE_URL;
+    console.log("****<>*****")
+    /*{
         user: process.env.DB_USER,
         password: (process.env.DB_PASSWORD),
         host: process.env.DB_URL,
         port: process.env.DB_PORT,
         database: process.env.DB_NAME,
         ssl: true
-    }
+    }*/
 }
 
 module.exports = { confJsonToDb, getCad, createDb };
