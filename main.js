@@ -14,6 +14,9 @@ http.createServer(async (req,res) => {
 
     res.writeHead(200, {'Access-Control-Allow-Origin' : '*'});
     
+    const end = req.url;
+    const {op} = URL.parse(end, true).query;
+
     //buffer do body da requisição
     const body = [];
     let data;
@@ -33,8 +36,7 @@ http.createServer(async (req,res) => {
         console.log("NoJSON");
     }
 
-    const end = req.url;
-    const {op} = URL.parse(end, true).query;
+    
     //console.log(">>>>>>>>>API ACCESS<<<<<<<<<<<<\n==========>>>>>>" + end)
 
     if(!op)

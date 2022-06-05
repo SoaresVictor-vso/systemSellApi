@@ -37,7 +37,7 @@ async function setOperation(op, data)
 
         //transforma o banco de dados JSON e passa para o banco de dados PGSQL
         case '101':
-            const { db } = URL.parse(end, true).query;
+            
             resp = await confJsonToDb();
             break;
 
