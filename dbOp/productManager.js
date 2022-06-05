@@ -149,7 +149,7 @@ const getAll = async function()
             console.log("connected on dbSysSale!");
             await cli.query("SELECT * FROM produto ORDER BY barcode").then((r) => {
                 console.log(r)
-                res = JSON.parse(r);
+                res = JSON.stringify(r.rows);
             })
         })
         .then(() => {
