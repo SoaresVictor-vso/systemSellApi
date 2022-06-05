@@ -1,6 +1,6 @@
 const { searchProduct } = require('./productManager');
-const { confJsonToDb }  = require('./dbOp/productManager');
-const { getCad } = require('./dbOp/productManager');
+//const { confJsonToDb }  = require('./dbOp/productManager');
+const { getCad, createDb, confJsonToDb } = require('./dbOp/productManager');
 const URL = require('url');
 
 async function setOperation(op, data)
@@ -20,10 +20,16 @@ async function setOperation(op, data)
             resp = await getCad(data.barcode);
             break;
 
+
+        //transforma o banco de dados JSON e passa para o banco de dados PGSQL
         case '101':
             const { db } = URL.parse(end, true).query;
             resp = await confJsonToDb();
             break;
+
+        //Cria as tabelas necessárias no banco de dados
+        case '199':
+            resp = createDb
 
         default:
             resp = JSON.stringify({erro : "invalidOperation"});

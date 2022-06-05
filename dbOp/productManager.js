@@ -7,24 +7,57 @@ let pgData = {
 const pgClient = require('pg').Client;
 let client;
 
+
+
+
 const confJsonToDb = async function()
 {
     preSetDb();
     
 
     const db = require('../Products.json');
-    // db.forEach(async (prod) => {
+    db.forEach(async (prod) => {
         
-    //     await includeCad(prod);
-    // })
+        await includeCad(prod);
+    })
 
-    //await includeCad(db[4]);
 
     await getAll()
     
     
 }
+const createDb = async function()
+{
+    const client = new pgClient(pgData);
+    try
+    {
+        await client.connect()
+        .then(async () => {
+            console.log("connected on dbSysSale!");
+            const strQry = "CREATE TABLE IF NOT EXISTS public.produto(barcode character varying(15) NOT NULL,description character varying(40) NOT NULL,quant integer DEFAULT 0,price integer DEFAULT 0,CONSTRAINT produto_pkey PRIMARY KEY (barcode),CONSTRAINT produto_description_key UNIQUE (description));";
+            console.log(strQry);
+            
+            await client.query(strQry).then(() => {
+                console.log("===> Created sucessfully Database!");
+            })
+           
+            
+        })
+        .then(() => {
+            client.end();
+            console.log("Conexão ao banco de dados finalizada")
+        })
 
+        return JSON.stringify({"stts": "success"});
+        
+    }
+    catch(err)
+    {
+        console.log(err);
+        return err;
+    }
+
+}
 
 const includeCad = async function(prod)
 {
@@ -143,4 +176,4 @@ const preSetDb = function()
     }
 }
 
-module.exports = { confJsonToDb, getCad };
+module.exports = { confJsonToDb, getCad, createDb };
