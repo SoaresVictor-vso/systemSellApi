@@ -28,7 +28,7 @@ http.createServer(async (req,res) => {
         }
         data = JSON.parse(Buffer.concat(body));
         
-        console.log(data.barcode);        
+        //console.log(data.barcode);        
     } 
     catch (error) 
     {

@@ -141,6 +141,7 @@ const getAll = async function()
 {
     preSetDb();
     const cli = new pgClient(pgData);
+    let res;
     try
     {
         await cli.connect()
@@ -148,19 +149,23 @@ const getAll = async function()
             console.log("connected on dbSysSale!");
             await cli.query("SELECT * FROM produto ORDER BY barcode").then((r) => {
                 console.log(r)
-                return r;
+                res = JSON.parse(r);
             })
         })
         .then(() => {
             cli.end();
-            console.log("Conexão ao banco de dados finalizada")
+            console.log("Conexão ao banco de dados finalizada");
         })
         
     }
     catch(err)
     {
+        
+        res = JSON.stringify({"erro": "dbConnection"});
         console.log(err);
     }
+
+    return res;
 }
 
 const preSetDb = function()
