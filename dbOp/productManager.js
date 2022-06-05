@@ -69,7 +69,7 @@ const includeCad = async function(prod)
         await client.connect()
         .then(async () => {
             console.log("connected on dbSysSale!");
-            const strQry = "INSERT INTO produto (barcode, description, quant, price) VALUES ('"+ 0000 +"', '" + prod.Description + "', 15, " + prod.Value * 100 + ");";
+            const strQry = "INSERT INTO produto (barcode, description, quant, price) VALUES ('"+ prod.Barcode +"', '" + prod.Description + "', 15, " + prod.Value * 100 + ");";
             console.log(strQry);
             
             await client.query(strQry).then(() => {
