@@ -1,6 +1,6 @@
 const { searchProduct } = require('./productManager');
 //const { confJsonToDb }  = require('./dbOp/productManager');
-const { getCad, createDb, confJsonToDb } = require('./dbOp/productManager');
+const { getCad, createDb, confJsonToDb, getAll } = require('./dbOp/productManager');
 const URL = require('url');
 
 async function setOperation(op, data)
@@ -37,8 +37,12 @@ async function setOperation(op, data)
 
         //transforma o banco de dados JSON e passa para o banco de dados PGSQL
         case '101':
-            
             resp = await confJsonToDb();
+            break;
+
+        //retorna o banco de produtos completo
+        case '102':
+            resp = await getAll();
             break;
 
         //Cria as tabelas necessárias no banco de dados

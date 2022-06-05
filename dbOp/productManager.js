@@ -120,12 +120,7 @@ const getCad = async function(cod)
                     }
                     product = JSON.stringify(jProd);
                 }
-
-                console.log(jProd);
-
             })
-           
-            
         })
         .then(() => {
             client.end();
@@ -152,7 +147,8 @@ const getAll = async function()
         .then(async () => {
             console.log("connected on dbSysSale!");
             await cli.query("SELECT * FROM produto ORDER BY barcode").then((r) => {
-                console.log(r);
+                console.log(r)
+                return r;
             })
         })
         .then(() => {
@@ -177,4 +173,4 @@ const preSetDb = function()
     }
 }
 
-module.exports = { confJsonToDb, getCad, createDb };
+module.exports = { confJsonToDb, getCad, createDb, getAll };
