@@ -29,7 +29,7 @@ http.createServer(async (req,res) => {
     } 
     catch (error) 
     {
-        data = JSON.parse({"stts": -1});
+        data = {"stts": -1};
         console.log("NoJSON");
     }
 

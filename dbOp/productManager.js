@@ -28,6 +28,7 @@ const confJsonToDb = async function()
 }
 const createDb = async function()
 {
+    preSetDb();
     const client = new pgClient(pgData);
     try
     {
@@ -61,13 +62,14 @@ const createDb = async function()
 
 const includeCad = async function(prod)
 {
+    preSetDb();
     const client = new pgClient(pgData);
     try
     {
         await client.connect()
         .then(async () => {
             console.log("connected on dbSysSale!");
-            const strQry = "INSERT INTO produto (barcode, description, quant, price) VALUES ('"+ 0000 +"', '" + prod.Description + "', 15, " + prod.Value + ");";
+            const strQry = "INSERT INTO produto (barcode, description, quant, price) VALUES ('"+ 0000 +"', '" + prod.Description + "', 15, " + prod.Value * 100 + ");";
             console.log(strQry);
             
             await client.query(strQry).then(() => {
