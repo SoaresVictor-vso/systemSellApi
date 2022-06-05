@@ -22,7 +22,7 @@ const confJsonToDb = async function()
     })
 
 
-    await getAll()
+    return await getAll()
     
     
 }
@@ -74,9 +74,7 @@ const includeCad = async function(prod)
             
             await client.query(strQry).then(() => {
                 console.log("added: " + prod.Barcode + " ==> " + prod.Description);
-            })
-           
-            
+            }) 
         })
         .then(() => {
             client.end();
@@ -86,7 +84,7 @@ const includeCad = async function(prod)
     }
     catch(err)
     {
-        console.log(err);
+        console.log("err");
     }
 
 }
@@ -148,7 +146,6 @@ const getAll = async function()
         .then(async () => {
             console.log("connected on dbSysSale!");
             await cli.query("SELECT * FROM produto ORDER BY barcode").then((r) => {
-                console.log(r)
                 res = JSON.stringify(r.rows);
             })
         })
