@@ -17,7 +17,8 @@ async function setOperation(op, data)
 
         //Usa o codigo passado por url para realizar a requisição simples de um produto à api
         case '1':
-            resp = await getCad(data.barcode);
+            if(data.barcode != null)
+                resp = await getCad(data.barcode);
             break;
 
 
@@ -29,7 +30,8 @@ async function setOperation(op, data)
 
         //Cria as tabelas necessárias no banco de dados
         case '199':
-            resp = createDb
+            resp = createDb()
+            break;
 
         default:
             resp = JSON.stringify({erro : "invalidOperation"});

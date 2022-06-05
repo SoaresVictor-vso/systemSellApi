@@ -29,6 +29,7 @@ http.createServer(async (req,res) => {
     } 
     catch (error) 
     {
+        //data = JSON.parse({"barcode": -1});
         console.log("NoJSON");
     }
 
