@@ -5,7 +5,7 @@ let pgData = {
 }
 
 const pgClient = require('pg').Client;
-let client;
+//let client;
 
 
 

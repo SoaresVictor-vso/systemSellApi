@@ -18,12 +18,20 @@ async function setOperation(op, data)
         //Usa o codigo passado por url para realizar a requisição simples de um produto à api
         case '1':
             if(data != null)
+            {
+                if(data.barcode != null)
                 {
-                    if(data.barcode != null)
-                    {
-                        resp = await getCad(data.barcode);
-                    }
+                    resp = await getCad(data.barcode);
                 }
+                else
+                {
+                    resp = JSON.stringify({"erro": "badRequest"});
+                }
+            }
+            else
+            {
+                resp = JSON.stringify({"erro": "badRequest"});
+            }
             break;
 
 
