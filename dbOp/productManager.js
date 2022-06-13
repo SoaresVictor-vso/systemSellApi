@@ -1,19 +1,9 @@
 
 
-let pgData = {
-    
-}
-
 const pgClient = require('pg').Client;
-//let client;
-
-
-
 
 const confJsonToDb = async function()
-{
-    preSetDb();
-    
+{   
 
     const db = require('../Products.json');
     db.forEach(async (prod) => {
@@ -28,8 +18,7 @@ const confJsonToDb = async function()
 }
 const createDb = async function()
 {
-    preSetDb();
-    const client = new pgClient(pgData);
+    const client = new pgClient(preSetDb());
     try
     {
         await client.connect()
@@ -62,8 +51,7 @@ const createDb = async function()
 
 const includeCad = async function(prod)
 {
-    preSetDb();
-    const client = new pgClient(pgData);
+    const client = new pgClient(preSetDb());
     try
     {
         await client.connect()
@@ -91,8 +79,7 @@ const includeCad = async function(prod)
 
 const getCad = async function(cod)
 {
-    preSetDb();
-    const client = new pgClient(pgData);
+    const client = new pgClient(preSetDb());
 
     let product;
 
@@ -137,8 +124,7 @@ const getCad = async function(cod)
 
 const getAll = async function()
 {
-    preSetDb();
-    const cli = new pgClient(pgData);
+    const cli = new pgClient(preSetDb());
     let res;
     try
     {
@@ -167,12 +153,24 @@ const getAll = async function()
 
 const preSetDb = function()
 {
-    pgData = {
-        connectionString: process.env.DATABASE_URL,
-        ssl: {
-            rejectUnauthorized: false
+    let obj;
+    if(process.env.ENV == "DEV")
+    {
+        obj = {
+            connectionString: process.env.DATABASE_URL
         }
     }
+    else
+    {
+        obj = {
+            connectionString: process.env.DATABASE_URL,
+            ssl: {
+                rejectUnauthorized: false
+            }
+        }
+    }
+
+    return obj;
 }
 
-module.exports = { confJsonToDb, getCad, createDb, getAll };
+module.exports = { confJsonToDb, getCad, createDb, getAll, preSetDb };

@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/SoaresVictor-vso/systemSellApi#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "dotenv": "^16.0.1",
     "pg": "^8.7.3"
   },

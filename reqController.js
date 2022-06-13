@@ -1,6 +1,6 @@
-const { searchProduct } = require('./productManager');
-//const { confJsonToDb }  = require('./dbOp/productManager');
+
 const { getCad, createDb, confJsonToDb, getAll } = require('./dbOp/productManager');
+const { logIn } = require('./dbOp/login');
 const URL = require('url');
 
 async function setOperation(op, data)
@@ -50,10 +50,33 @@ async function setOperation(op, data)
             resp = createDb()
             break;
 
+        //Login passando user e pass por json
+        case '400':
+            if(data != null)
+            {
+                if(data.user != null && data.pass != null)
+                {
+                    resp = await logIn(data.user, data.pass)
+                }
+                else
+                {
+                    resp = JSON.stringify({"erro": "badRequest"});
+                }
+            }
+            else
+            {
+                resp = JSON.stringify({"erro": "badRequest"});
+            }
+            
+            break;
+            
+        
+
         default:
             resp = JSON.stringify({erro : "invalidOperation"});
             break;
     }
+    console.log(resp)
     return resp;
 }
 
