@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken')
 const res = require('express/lib/response');
 const pgClient = require('pg').Client;
 const {preSetDb} = require('./productManager');
@@ -12,24 +13,25 @@ dotenv.config();
 
 const logIn = async function(user, pass)
 {
-    const hash = await getHash(user)/*.then(async (r) =>{*/
-    if(hash == JSON.stringify({"erro": "databaseFailed"}))
+    const userData = await getHash(user)/*.then(async (r) =>{*/
+    if(userData == JSON.stringify({"erro": "databaseFailed"}))
     {
         return ret = {"stts":"invalidPassorUser"};
     }
     else
     {
-        return await validate(pass, hash)
+        return await validate(pass, userData)
     }
 }
 
-const validate = async function(pass, hash)
+const validate = async function(pass, userData)
 {
     let ret;
-    const result = await bcrypt.compare(pass, hash)
+    const result = await bcrypt.compare(pass, userData.rows[0].hash)
     if(result)
     {
         ret = {"stts":"logged"}
+        ret = getJwt(userData.rows[0].user_id);
     }
     else
     {
@@ -46,10 +48,11 @@ const getHash = async function(user)
     {
         await client.connect()
         .then(async () => {
-            const strQry = "SELECT hash FROM usuario WHERE user_name = '" + user + "';";
+            const strQry = "SELECT user_id, hash FROM usuario WHERE user_name = '" + user + "';";
             
             await client.query(strQry).then((r) => {
-                ret = r.rows[0].hash;
+                console.log(r);
+                ret = r;
             }) 
         })
         .then(() => {
@@ -63,6 +66,14 @@ const getHash = async function(user)
     }
     return ret
 
+}
+
+const getJwt = function(uid)
+{
+    let key = process.env.JWT_Key;
+    let token = jwt.sign({"uid":uid}, key, {expiresIn:7200});
+    
+    return {"jwt":token};
 }
 
 
