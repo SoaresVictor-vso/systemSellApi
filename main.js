@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000;
 
 http.createServer(async (req,res) => {
 
-    res.writeHead(200, {'Access-Control-Allow-Origin' : '*'});
+    res.writeHead(200, {'Access-Control-Allow-Origin' : '*', 'Access-Control-Allow-Headers' : '*'});
     
     const end = req.url;
     const {op} = URL.parse(end, true).query;
@@ -20,21 +20,26 @@ http.createServer(async (req,res) => {
     //buffer do body da requisição
     const body = [];
     let data;
-    try 
+    if(req.method != "get")
     {
-        //adiciona cada parte do corpo da requisição no buffer
-        for await (const chunk of req) {
-            body.push(chunk);
+        try 
+        {
+            //adiciona cada parte do corpo da requisição no buffer
+            for await (const chunk of req) {
+                body.push(chunk);
+            }
+            data = JSON.parse(Buffer.concat(body));
+            
+            //console.log(data.barcode);        
+        } 
+        catch (error) 
+        {
+            data = {"stts": -1};
+            console.log(error)
+            console.log("NoJSON");
         }
-        data = JSON.parse(Buffer.concat(body));
-        
-        //console.log(data.barcode);        
-    } 
-    catch (error) 
-    {
-        data = {"stts": -1};
-        console.log("NoJSON");
     }
+    
 
     
     //console.log(">>>>>>>>>API ACCESS<<<<<<<<<<<<\n==========>>>>>>" + end)

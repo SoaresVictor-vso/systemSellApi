@@ -13,10 +13,10 @@ dotenv.config();
 
 const logIn = async function(user, pass)
 {
-    const userData = await getHash(user)/*.then(async (r) =>{*/
+    const userData = await getHash(user)
     if(userData == JSON.stringify({"erro": "databaseFailed"}))
     {
-        return ret = {"stts":"invalidPassorUser"};
+        return ret = JSON.stringify({"stts":"invalidPassorUser"});
     }
     else
     {
@@ -27,16 +27,26 @@ const logIn = async function(user, pass)
 const validate = async function(pass, userData)
 {
     let ret;
-    const result = await bcrypt.compare(pass, userData.rows[0].hash)
-    if(result)
+    let result;
+    if(userData != null)
     {
-        ret = {"stts":"logged"}
-        ret = getJwt(userData.rows[0].user_id);
+        console.log(userData)
+        result = await bcrypt.compare(pass, userData.hash)
+        if(result)
+        {
+            ret = {"stts":"logged"}
+            ret = getJwt(userData.user_id);
+        }
+        else
+        {
+            ret = {"stts":"invalidPassorUser"}
+        }
     }
     else
     {
         ret = {"stts":"invalidPassorUser"}
     }
+    
     return JSON.stringify(ret);
 }
 
@@ -51,8 +61,14 @@ const getHash = async function(user)
             const strQry = "SELECT user_id, hash FROM usuario WHERE user_name = '" + user + "';";
             
             await client.query(strQry).then((r) => {
-                console.log(r);
-                ret = r;
+                if(r.rowCount == 0)
+                {
+                    ret = JSON.stringify({"erro": "databaseFailed"});
+                }
+                else
+                {
+                    ret = r.rows[0];
+                }
             }) 
         })
         .then(() => {

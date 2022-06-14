@@ -25,7 +25,7 @@ async function setOperation(op, data)
                 }
                 else
                 {
-                    resp = JSON.stringify({"erro": "badRequest"});
+                    resp = JSON.stringify(data);
                 }
             }
             else
@@ -76,7 +76,7 @@ async function setOperation(op, data)
             resp = JSON.stringify({erro : "invalidOperation"});
             break;
     }
-    console.log(resp)
+    //console.log(resp)
     return resp;
 }
 
