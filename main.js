@@ -4,8 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const { setOperation } = require('./reqController');
 const dotenv = require('dotenv');
-const { Console } = require('console');
 dotenv.config();
+const {getRole} = require('./dbOp/authorization');
 
 const port = process.env.PORT || 3000;
 
@@ -29,28 +29,28 @@ http.createServer(async (req,res) => {
                 body.push(chunk);
             }
             data = JSON.parse(Buffer.concat(body));
-            
-            //console.log(data.barcode);        
+                     
         } 
         catch (error) 
         {
             data = {"stts": -1};
-            console.log(error)
-            console.log("NoJSON");
+            console.log(error);
         }
     }
     
-
-    
-    //console.log(">>>>>>>>>API ACCESS<<<<<<<<<<<<\n==========>>>>>>" + end)
 
     if(!op)
     {
         return res.end(JSON.stringify({erro : "noOperation"}));
     }
+    else if(data != null)
+    {
+        await setOperation(op, data).then((r) => {
+            return res.end(r);})
+    }
     else
     {
-        setOperation(op, data).then((r) => {return res.end(r);})
+        return res.end(JSON.stringify({'erro':'badRequest'}))
     }
 }).listen(port , console.log("API up at port " + port));
 

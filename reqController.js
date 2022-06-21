@@ -1,13 +1,40 @@
 
 const { getCad, createDb, confJsonToDb, getAll } = require('./dbOp/productManager');
 const { logIn } = require('./dbOp/login');
+const { getRole } = require('./dbOp/authorization')
 const URL = require('url');
 
 async function setOperation(op, data)
 { 
-    //const {op, cod} = URL.parse(end, true).query;
     let resp;
+    try
+    {
+        await getRole(data.token)
+        .then(async (role) => {
+            const res = await action(op, role, data);
+            resp = res;
+        })
+    }
+    catch (err)
+    {
+        if(data.token == null)
+        {
+            const res = await action(op, "guest", data);
+            resp = res;
+        }
+        else
+        {
+            console.log(err);
+            resp = JSON.stringify({"erro": "badRequest"});
+        }
+    }
+    return resp;
 
+}
+
+const action = async function(op, permission, data)
+{
+    let roles;
     switch (op) {
 
         //DEPRECATED: emite alerta
@@ -17,16 +44,59 @@ async function setOperation(op, data)
 
         //Usa o codigo passado por url para realizar a requisição simples de um produto à api
         case '1':
-            if(data != null)
+            roles = ['admin', 'editor', 'caixa'];
+            if(!roles.find(item => item == permission))
             {
-                if(data.barcode != null)
+                resp = JSON.stringify({"erro": "permissionDenied"});
+            }
+            else if(data.barcode != null)
+            {
+                resp = await getCad(data.barcode);
+            }
+            else
+            {
+                resp = JSON.stringify({"erro": "badRequest"});
+            }
+            break;
+
+
+        //Login passando user e pass por json
+        case '20':
+            if(data.user != null && data.pass != null)
+            {
+                resp = await logIn(data.user, data.pass)
+            }
+            else
+            {
+                resp = JSON.stringify({"erro": "badRequest"});
+            }
+            break;
+        
+        case '21':
+            let role;
+            if(data.token != null)
+            {
+                role = await getRole(data.token);
+                if(role != "erro")
                 {
-                    resp = await getCad(data.barcode);
+                    resp = JSON.stringify({'stts':'logged'})
                 }
                 else
                 {
-                    resp = JSON.stringify(data);
+                    resp = JSON.stringify({'stts':'unlogged'})
                 }
+            }
+            else
+            {
+                resp = JSON.stringify({"erro": "badRequest"});
+            }
+            break;
+        
+        case '22':
+            if(data.token != null)
+            {
+                const permission = await getRole(data.token);
+                resp = permission;
             }
             else
             {
@@ -50,25 +120,7 @@ async function setOperation(op, data)
             resp = createDb()
             break;
 
-        //Login passando user e pass por json
-        case '400':
-            if(data != null)
-            {
-                if(data.user != null && data.pass != null)
-                {
-                    resp = await logIn(data.user, data.pass)
-                }
-                else
-                {
-                    resp = JSON.stringify({"erro": "badRequest"});
-                }
-            }
-            else
-            {
-                resp = JSON.stringify({"erro": "badRequest"});
-            }
-            
-            break;
+        
             
         
 
@@ -79,5 +131,7 @@ async function setOperation(op, data)
     //console.log(resp)
     return resp;
 }
+
+
 
 module.exports = { setOperation }

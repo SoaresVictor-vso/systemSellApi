@@ -34,7 +34,6 @@ const validate = async function(pass, userData)
         result = await bcrypt.compare(pass, userData.hash)
         if(result)
         {
-            ret = {"stts":"logged"}
             ret = getJwt(userData.user_id);
         }
         else
