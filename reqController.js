@@ -1,8 +1,11 @@
 
-const { getCad, createDb, confJsonToDb, getAll } = require('./dbOp/productManager');
+const { getCad } = require('./dbOp/productManager');
 const { logIn } = require('./dbOp/login');
-const { getRole } = require('./dbOp/authorization')
+const { getRole, isAllowed } = require('./dbOp/authorization');
+const { dbQuery } = require('./dbOp/dbManager');
+const { cad } = require('./dbOp/addUser');
 const URL = require('url');
+const e = require('express');
 
 async function setOperation(op, data)
 { 
@@ -11,7 +14,14 @@ async function setOperation(op, data)
     {
         await getRole(data.token)
         .then(async (role) => {
-            const res = await action(op, role, data);
+            
+            let perm = [];
+            rolesList = JSON.parse(role)
+            rolesList.forEach(e => {
+                perm.push(e.role_name);
+            });
+            console.log(perm)
+            const res = await action(op, perm, data);
             resp = res;
         })
     }
@@ -19,7 +29,7 @@ async function setOperation(op, data)
     {
         if(data.token == null)
         {
-            const res = await action(op, "guest", data);
+            const res = await action(op, ["guest"], data);
             resp = res;
         }
         else
@@ -45,7 +55,8 @@ const action = async function(op, permission, data)
         //Usa o codigo passado por url para realizar a requisição simples de um produto à api
         case '1':
             roles = ['admin', 'editor', 'caixa'];
-            if(!roles.find(item => item == permission))
+           
+            if(!isAllowed(roles, permission))
             {
                 resp = JSON.stringify({"erro": "permissionDenied"});
             }
@@ -104,22 +115,40 @@ const action = async function(op, permission, data)
             }
             break;
 
-
-        //transforma o banco de dados JSON e passa para o banco de dados PGSQL
-        case '101':
-            resp = await confJsonToDb();
+        case '23':
+            roles = ['admin'];
+            if(!isAllowed(roles, permission))
+            {
+                resp = JSON.stringify({"erro": "permissionDenied"});
+            }
+            else if(data.user != null && data.pass != null && data.role != null)
+            {
+                resp = await cad(data.user, data.pass, data.role);
+            }
+            else
+            {
+                resp = JSON.stringify({"erro": "badRequest"});
+            }
             break;
+        
 
-        //retorna o banco de produtos completo
-        case '102':
-            resp = await getAll();
+        
+        case '100':
+            roles = ['admin'];
+            if(!isAllowed(roles, permission))
+            {
+                resp = JSON.stringify({"erro": "permissionDenied"});
+            }
+            else if(data.query != null)
+            {
+                resp = await dbQuery(String(data.query))
+            }
+            else
+            {
+                resp = JSON.stringify({"erro": "badRequest"});
+            }
             break;
-
-        //Cria as tabelas necessárias no banco de dados
-        case '199':
-            resp = createDb()
-            break;
-
+        
         
             
         

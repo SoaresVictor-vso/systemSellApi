@@ -1,13 +1,8 @@
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
-const jwt = require('jsonwebtoken')
-const res = require('express/lib/response');
-const pgClient = require('pg').Client;
-const {preSetDb} = require('./productManager');
+const jwt = require('jsonwebtoken');
+const {dbQuery} = require('./dbManager');
 
-/*let name = 'test';
-let senha = "patinho123";
-let hashu = "$2b$12$THX4D9rDnvUKGL.5UgwwSez4sgbzgCIXRLbOaqhYGS0786i2t3YJK"*/
 
 dotenv.config();
 
@@ -30,7 +25,6 @@ const validate = async function(pass, userData)
     let result;
     if(userData != null)
     {
-        console.log(userData)
         result = await bcrypt.compare(pass, userData.hash)
         if(result)
         {
@@ -51,35 +45,12 @@ const validate = async function(pass, userData)
 
 const getHash = async function(user)
 {
-    let ret;
-    const client = new pgClient(preSetDb());
-    try
-    {
-        await client.connect()
-        .then(async () => {
-            const strQry = "SELECT user_id, hash FROM usuario WHERE user_name = '" + user + "';";
-            
-            await client.query(strQry).then((r) => {
-                if(r.rowCount == 0)
-                {
-                    ret = JSON.stringify({"erro": "databaseFailed"});
-                }
-                else
-                {
-                    ret = r.rows[0];
-                }
-            }) 
-        })
-        .then(() => {
-            client.end();
-        })
-        
-    }
-    catch(err)
-    {
-        ret = JSON.stringify({"erro": "databaseFailed"});
-    }
-    return ret
+    const strQry = "SELECT user_id, hash FROM usuario WHERE user_name = '" + user + "';";
+
+    let obj = await dbQuery(strQry);
+    obj = JSON.parse(obj)
+    
+    return obj[0];
 
 }
 
