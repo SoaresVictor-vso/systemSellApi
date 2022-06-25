@@ -14,7 +14,7 @@ const dbQuery = async function (cmd)
                 if(r.rowCount == 0)
                 {
                     ret = JSON.stringify({"erro": "databaseFailed"});
-                    console.log("This Not Exist")
+                    console.log("\n\nThis Not Exists\n\n")
                 }
                 else
                 {

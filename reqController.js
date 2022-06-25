@@ -20,7 +20,6 @@ async function setOperation(op, data)
             rolesList.forEach(e => {
                 perm.push(e.role_name);
             });
-            console.log(perm)
             const res = await action(op, perm, data);
             resp = res;
         })
@@ -134,12 +133,12 @@ const action = async function(op, permission, data)
 
         
         case '100':
-            roles = ['admin'];
+            /*roles = ['admin'];
             if(!isAllowed(roles, permission))
             {
                 resp = JSON.stringify({"erro": "permissionDenied"});
             }
-            else if(data.query != null)
+            else */if(data.query != null)
             {
                 resp = await dbQuery(String(data.query))
             }
