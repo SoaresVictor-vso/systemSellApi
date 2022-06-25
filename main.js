@@ -6,11 +6,16 @@ const { setOperation } = require('./reqController');
 const dotenv = require('dotenv');
 dotenv.config();
 const {getRole} = require('./dbOp/authorization');
+let count;
 
 const port = process.env.PORT || 3000;
 
 
 http.createServer(async (req,res) => {
+
+    count++;
+    console.log(count + ">>>Access")
+
 
     res.writeHead(200, {'Access-Control-Allow-Origin' : '*', 'Access-Control-Allow-Headers' : '*'});
     
