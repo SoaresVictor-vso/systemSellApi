@@ -5,7 +5,6 @@ const { getRole, isAllowed } = require('./dbOp/authorization');
 const { dbQuery } = require('./dbOp/dbManager');
 const { cad } = require('./dbOp/addUser');
 const URL = require('url');
-const e = require('express');
 
 async function setOperation(op, data)
 { 
