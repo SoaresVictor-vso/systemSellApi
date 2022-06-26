@@ -16,6 +16,11 @@ const getCad = async function(cod)
 
     const prod = JSON.parse(await dbQuery(strQry))[0];
 
+    if(prod.erro != null)
+    {
+        return JSON.stringify(prod.erro);
+    }
+
     ret = {
         "barcode": prod.barcode,
         "description": prod.description,
