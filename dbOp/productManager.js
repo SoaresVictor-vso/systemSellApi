@@ -15,7 +15,7 @@ const getCad = async function(cod)
     const strQry = "SELECT * FROM produto WHERE barcode = '" + cod + "'";
 
     const prod = JSON.parse(await dbQuery(strQry))[0];
-
+    console.log(JSON.stringify(prod))
     if(prod.erro != null)
     {
         return JSON.stringify(prod.erro);
