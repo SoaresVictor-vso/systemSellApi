@@ -56,7 +56,7 @@ const getHash = async function(user)
 
 const getJwt = function(uid)
 {
-    let key = process.env.JWT_Key;
+    let key = process.env.JWT_KEY;
     let token = jwt.sign({"uid":uid}, key, {expiresIn:7200});
     
     return {"jwt":token};
