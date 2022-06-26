@@ -12,7 +12,7 @@ const getRole = async function (token)
     }
     catch(err)
     {
-        return "erro"
+        return ["erro"]
     }
     
     const strQry = "SELECT roles.role_name FROM usuario_role INNER JOIN roles ON roles.role_id = usuario_role.role_id WHERE(usuario_role.user_id = '" + decoded.uid + "');"
