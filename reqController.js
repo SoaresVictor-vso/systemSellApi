@@ -114,12 +114,12 @@ const action = async function(op, permission, data)
             break;
 
         case '23':
-            /*roles = ['admin'];
+            roles = ['admin'];
             if(!isAllowed(roles, permission))
             {
                 resp = JSON.stringify({"erro": "permissionDenied"});
             }
-            else*/ if(data.user != null && data.pass != null && data.role != null)
+            else if(data.user != null && data.pass != null && data.role != null)
             {
                 resp = await cad(data.user, data.pass, data.role);
             }
@@ -132,12 +132,12 @@ const action = async function(op, permission, data)
 
         
         case '100':
-            /*roles = ['admin'];
+            roles = ['admin'];
             if(!isAllowed(roles, permission))
             {
                 resp = JSON.stringify({"erro": "permissionDenied"});
             }
-            else */if(data.query != null)
+            else if(data.query != null)
             {
                 resp = await dbQuery(String(data.query))
             }
