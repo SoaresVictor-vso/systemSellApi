@@ -1,3 +1,7 @@
+API DO PROJETO https://github.com/SoaresVictor-vso/systemSell
+ainda em desenvolvimento
+
+
 operaçãos da API
 
 op <0, 99>      OPERAÇÕES COMUNS                                                                ROLES PERMITIDAS
