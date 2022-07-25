@@ -25,3 +25,14 @@ op <100+>       OPERAÇÕES DE CONFIGURAÇÃO E MANUTENÇÃO;
 op = 101        GET     Cadastra produtos de um .json no banco de dados;                        Admin
 op = 102        GET     Puxa a lista de todos os produtos do banco de dados                     Admin
 op = 199        GET     Roda os comandos responsáveis por criar o banco de dados                Admin
+
+
+barcode, description, buyprice, sellprice, margin, quant
+let prod = {
+    barcode:"7891234567890",
+    description:"Something",
+    buyprice:"200",
+    sellprice:"350",
+    margin:"75",
+    quant:"2"
+}

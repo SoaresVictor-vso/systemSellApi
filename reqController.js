@@ -1,5 +1,5 @@
 
-const { getCad } = require('./dbOp/productManager');
+const { getCad, updateCad, fullGetCad, find } = require('./dbOp/productManager');
 const { logIn } = require('./dbOp/login');
 const { getRole, isAllowed } = require('./dbOp/authorization');
 const { dbQuery } = require('./dbOp/dbManager');
@@ -33,7 +33,7 @@ async function setOperation(op, data)
         else
         {
             console.log(err);
-            resp = JSON.stringify({"erro": "badRequest"});
+            resp = JSON.stringify({"erro": "roleFailed"});
         }
     }
     return resp;
@@ -68,6 +68,57 @@ const action = async function(op, permission, data)
             }
             break;
 
+        case '2':
+            roles = ['admin', 'editor'];
+           
+            if(!isAllowed(roles, permission))
+            {
+                resp = JSON.stringify({"erro": "permissionDenied"});
+            }
+            else if(data.prod != null)
+            {
+                resp = await updateCad(data.prod);
+            }
+            else
+            {
+                resp = JSON.stringify({"erro": "badRequest"});
+            }
+            break;
+        case '3':
+            roles = ['admin', 'editor'];
+            
+            if(!isAllowed(roles, permission))
+            {
+                resp = JSON.stringify({"erro": "permissionDenied"});
+            }
+            else if(data.barcode != null)
+            {
+                resp = await fullGetCad(data.barcode);
+            }
+            else
+            {
+                resp = JSON.stringify({"erro": "badRequest"});
+            }
+            break;
+
+            case '4':
+                roles = ['admin', 'editor', 'caixa'];
+               
+                if(!isAllowed(roles, permission))
+                {
+                    resp = JSON.stringify({"erro": "permissionDenied"});
+                }
+                else if(data.name != null)
+                {
+                    
+                    resp = await find(data.name);
+                }
+                else
+                {
+                    resp = JSON.stringify({"erro": "badRequest"});
+                }
+                break;
+
 
         //Login passando user e pass por json
         case '20':
@@ -86,8 +137,11 @@ const action = async function(op, permission, data)
             if(data.token != null)
             {
                 role = await getRole(data.token);
-                if(role != "erro")
+                roleName = JSON.parse(role).role_name;
+                console.log(role)
+                if(roleName != "erro" && roleName != null)
                 {
+                    console.log(">>>" + JSON.parse(role).role_name)
                     resp = JSON.stringify({'stts':'logged'})
                 }
                 else
