@@ -26,7 +26,6 @@ const getRole = async function (token)
 const isAllowed = function(allowedRoles, userRoles)
 {
     ret = false;
-    //console.log("permitidas :" + allowedRoles + "\nConseguidas:" + userRoles)
     allowedRoles.forEach(e => {
         if(userRoles.find(item => item == e))
         {

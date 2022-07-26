@@ -3,7 +3,6 @@ const {dbQuery} = require('./dbManager')
 
 const updateCad = async function(prod)
 {
-    console.log(prod.description);
     let ret;
     try 
     {
@@ -20,12 +19,10 @@ const updateCad = async function(prod)
         if(dbErr != "voidReturn")
         {
             ret = await changeCad(prod);
-            console.log("change")
         }
         else
         {
             ret = await addCad(prod);
-            console.log("add")
         }
 
         return ret;
@@ -42,6 +39,11 @@ const updateCad = async function(prod)
 const cf = function(word)       //cf = charfliter
 {
     return String(word).replace(/[^a-z0-9 ]/gi, '');
+}
+
+const cfSearch = function(word)     //cf = char filter
+{
+    return String(word).replace(/[^a-z0-9 %]/gi, '');
 }
 
 const changeCad = async function(prod)
@@ -65,7 +67,6 @@ const changeCad = async function(prod)
     {
         qry = qry.replace('null', '0');
     }
-    console.log(qry)
 
     ret = await dbQuery(qry);
     
@@ -93,7 +94,6 @@ const addCad = async function(prod)
     {
         qry = qry.replace('null', '0');
     }
-    console.log(qry)
     
     ret = await dbQuery(qry);
     
@@ -161,7 +161,7 @@ const fullGetCad = async function(cod)
 
 const find = async function(name)
 {
-    const strQry = "SELECT barcode, description, quant, sellPrice FROM produto WHERE description ilike '" + name + "%';";
+    const strQry = "SELECT barcode, description, quant, sellPrice FROM produto WHERE description ilike '" + cfSearch(name) + "%' ORDER BY description;";
     
     try 
     {
@@ -169,8 +169,48 @@ const find = async function(name)
     } 
     catch (error) 
     {
-        return JSON.stringify({"erro":error});
+        console.log (JSON.stringify({"erro":error}));
     }
 }
 
-module.exports = {getCad, updateCad, fullGetCad, find};
+const buy = async function (list)
+{
+    isFailed = false;
+    errors = [];
+    list.forEach(async (e) => {
+        const exec = await buyExecute(e.quant, e.barcode)
+        if(exec.stts == "erro")
+        {
+            ifFailed = true;
+            const execption = e.barcode + "=> " + exec.erro;
+            errors.push({erro:execption})
+        }
+    });
+
+    if(isFailed)
+    {
+        return JSON.stringify({stts:"erro", errorList:errors});
+    }
+    else
+    {
+        return JSON.stringify({stts:"ok"});
+    }
+}
+
+const buyExecute = async function (quant, barcode)
+{
+    let resp;
+    const qry = "UPDATE produto SET quant = quant - " + parseInt(quant) + " WHERE barcode = '"+ cf(barcode) +"';"
+    try
+    {
+        await dbQuery(qry);
+        resp = {stts : "ok"};
+    }
+    catch (err)
+    {
+        resp = {stts : "erro", erro:err};
+    }
+    return JSON.stringify(resp);
+}
+
+module.exports = {getCad, updateCad, fullGetCad, find, buy};
