@@ -12,11 +12,13 @@ const getRole = async function (token)
     }
     catch(err)
     {
-        return ["erro"]
+        let role = [{"role_name":"erro"}]
+        return JSON.stringify(role);
     }
-    
     const strQry = "SELECT roles.role_name FROM usuario_role INNER JOIN roles ON roles.role_id = usuario_role.role_id WHERE(usuario_role.user_id = '" + decoded.uid + "');"
     let ret = await dbQuery(strQry);
+    
+    
 
     return ret;
 }
@@ -24,7 +26,6 @@ const getRole = async function (token)
 const isAllowed = function(allowedRoles, userRoles)
 {
     ret = false;
-    //console.log("permitidas :" + allowedRoles + "\nConseguidas:" + userRoles)
     allowedRoles.forEach(e => {
         if(userRoles.find(item => item == e))
         {

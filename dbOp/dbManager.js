@@ -13,7 +13,7 @@ const dbQuery = async function (cmd)
             await client.query(cmd).then((r) => {
                 if(r.rowCount == 0)
                 {
-                    ret = JSON.stringify({"erro": "databaseFailed"});
+                    ret = JSON.stringify({"erro": "voidReturn"});
                     console.log("\n\nThis Not Exists\n\n")
                 }
                 else
