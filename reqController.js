@@ -153,9 +153,17 @@ const action = async function(op, permission, data)
             let role;
             if(data.token != null)
             {
-                role = await getRole(data.token);
-                roleName = JSON.parse(role).role_name;
-                if(roleName != "erro" && roleName != null)
+                //role = await getRole(data.token);
+                roleName = permission[0];
+                console.log(roleName)
+
+                let logged = false;
+                permission.forEach(e => {
+                    if(e != "erro" && e != null)
+                        logged = true;
+                });
+
+                if(logged)
                 {
                     resp = JSON.stringify({'stts':'logged'})
                 }
